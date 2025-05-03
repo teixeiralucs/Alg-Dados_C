@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "DoublyLinkedList.h"
-#include "DoublyLinkedList.c"
+//#include "DoublyLinkedList.c"
 
 void limparATela(){
     #ifdef _WIN32
@@ -72,7 +72,7 @@ int main(){
             case 1:
                 printf("Digite o valor inteiro a ser inserido no início");
                 if(scanf("%d" , &valorInteiro) != 1 ){
-                    printf("Número diitado incorreto para o tipo inteiro.\n");
+                    printf("Número digitado incorreto para o tipo inteiro.\n");
                     int c;
                     while ((c = getchat()) != '\n' && c != EOF);
                 }
@@ -87,8 +87,68 @@ int main(){
                 }
                 printf("Pressione Enter para continuar...");
                 getchar();
-            break;
+                break;
         case 2:
+            printf("Digite o valor inteiro que será inserido no final: ");
+            if (scanf("%d" , &valorInteiro != 1)){
+                printf("Número digitado incorreto para o tipo inteiro.\n");
+                int c;
+                while ((c = getchar()) != '\n' && c != EOF);
+            }
+            else{
+                getchar();
+                if (!inserirNoFim(lista, &valorInteiro, sizeof(int))){
+                    printf("Falha ao inserir no final. \n");
+                }
+                else{
+                    printf("Valor %d inserido no final com sucesso.\n" , valorInteiro);
+                }
+                printf("Pressione Enter para continuar...");
+                getchar();
+                break;
+            }
+        case 3:
+            dadoRemovido = removerDoInicio(lista);
+            if(dadoRemovido != NULL){
+                printf("Número removido do início: ")
+                imprimirInt(dadoRemovido);
+                printf("\n");
+                free(dadoRemovido);
+                dadoRemovido = NULL;
+            }
+            else{
+                printf("A Lista está vazia, não há nenhum dado para ser removido.\n");
+            }
+            printf("Pressione Enter para continuar...");
+            getchar();
+            break;
         }
+        case 4:
+            dadoRemovido = removerDoFim(lista);
+            if(dadoRemovido != NULL){
+                printf("Número removido do final: ")
+                imprimirInt(dadoRemovido);
+                printf("\n");
+                free(dadoRemovido);
+                dadoRemovido = NULL;
+            }
+            else{
+                printf("A Lista está vazia, não há nenhum dado para ser removido.\n");
+            }
+            printf("Pressione Enter para continuar...");
+            getchar();
+            break;
+        case 0:
+            printf("Encerrando o programa, obrigado por utiliza-lo.\n");
+            break;
+        default:
+        printf("Opção inválida, por favor tente novamente.\n");
+        printf("Pressione Enter para continuar...");
+        getchar();
+        break;
     }
+    while(opcao != 0);
+    destruirLista(lista);
+    printf("Memória liberada e programa encerrado.\n");
+    return 0;
 }

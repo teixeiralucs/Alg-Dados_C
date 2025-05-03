@@ -7,23 +7,22 @@ ListaDuplamenteEncadeada* criarLista(){
     ListaDuplamenteEncadeada* lista = (ListaDuplamenteEncadeada*)malloc(sizeof(ListaDuplamenteEncadeada));
 }
 
-if (!lista){
+if (!lista) {
     perror("Não foi possível alocar memória")
     return NULL;
 }
 
-lista -> inicio = NULL;
-lista -> fim = NULL;
-lista -> tamanho = 0;
-lista -> memoriaAlocada = sizeof(ListaDuplamenteEncadeada);
-
+lista->inicio = NULL;
+lista->fim = NULL;
+lista->tamanho = 0;
+lista->memoriaAlocada = sizeof(ListaDuplamenteEncadeada);
 return lista;
 
 void destruirLista(ListaDuplamenteEncadeada* lista){
     if(!lista) return;
     No* atual = lista -> inicio;
     while (atual != NULL){
-        Nó* proximo = atual -> proximo;
+        No* proximo = atual -> proximo;
         if (atual -> dado != NULL){
             free(atual -> dado);
         }
@@ -41,7 +40,7 @@ bool inserirNoInicio(ListaDuplamenteEncadeada* lista, const void* dado, size_t t
     if (!lista || !dado) return false;
     No* novoNo = (No*)malloc(sizeof(No));
     if(!novoNo){
-        perror("Falha ao alocar memórioa no Nó")
+        perror("Falha ao alocar memórioa no Nó");
         return false;
     }
     novoNo -> anterior = NULL;
@@ -70,13 +69,13 @@ bool inserirNoInicio(ListaDuplamenteEncadeada* lista, const void* dado, size_t t
     return true;
 }
 
-bool inserirNoFim(ListaDuplamenteEncadeada* lsita, const void* dado, size_t tamanhoDoDado){
+bool inserirNoFim(ListaDuplamenteEncadeada* lista, const void* dado, size_t tamanhoDoDado){
     if (!lista || !dado) return false;
 
     No* novoNo = (No*)malloc(sizeof(No));
     if(!novoNo){
         perror("Falha ao alocar memória no Nó");
-        retirn false;
+        return false;
     }
 
     novoNo -> anterior = NULL;
@@ -143,7 +142,7 @@ void* removerDoFim(ListaDuplamenteEncadeada* lista){
     }
     lista -> tamanho--;
     lista -> memoriaAlocada -= (sizeof(No) + tamanhoDoDado);
-    free(noRemovido)
+    free(noRemovido);
 
     return dadoRemovido;
 }
@@ -171,7 +170,7 @@ void imprimirLista(const ListaDuplamenteEncadeada* lista, void (*imprimirDado)(c
     }
     No* atual = lista -> inicio;
     while(atual != NULL){
-        if (atual -> dado != NULL && imprimirDado !+ NULL){
+        if (atual -> dado != NULL && imprimirDado != NULL){
             imprimirDado(atual -> dado);
         }
         else{

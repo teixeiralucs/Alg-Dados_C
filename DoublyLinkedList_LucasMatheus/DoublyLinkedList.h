@@ -9,12 +9,12 @@ typedef struct No{
     struct No* proximo;
     struct No* anterior;    
     } No;
-typedef struct {
+typedef struct ListaDuplamenteEncadeada {
     No* inicio;
     No* fim;
     int tamanho;
     size_t memoriaAlocada;
-}ListaDuplamenteEncadeada; 
+} ListaDuplamenteEncadeada; 
 
 ListaDuplamenteEncadeada* criarLista();
 void destruirLista(ListaDuplamenteEncadeada* lista);
