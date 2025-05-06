@@ -26,7 +26,7 @@ void* removerDoFim(ListaDuplamenteEncadeada* lista);
 void* pegarInicio(const ListaDuplamenteEncadeada* lista);
 void* pegarFim(const ListaDuplamenteEncadeada* lista);
 int tamanhoDaLista(const ListaDuplamenteEncadeada* lista);
-size_t MemoriaAlocadaDaLista (const ListaDuplamenteEncadeada* lista);
+size_t memoriaAlocadaDaLista (const ListaDuplamenteEncadeada* lista);
 void imprimirLista(const ListaDuplamenteEncadeada* lista, void (*imprimirDado)(const void*));
 
 #endif 

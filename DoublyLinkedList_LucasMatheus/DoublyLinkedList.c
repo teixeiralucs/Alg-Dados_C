@@ -5,19 +5,16 @@
 
 ListaDuplamenteEncadeada* criarLista(){
     ListaDuplamenteEncadeada* lista = (ListaDuplamenteEncadeada*)malloc(sizeof(ListaDuplamenteEncadeada));
+    if (!lista) {
+        perror("Não foi possível alocar memória");
+        return NULL;
+    }
+    lista->inicio = NULL;
+    lista->fim = NULL;
+    lista->tamanho = 0;
+    lista->memoriaAlocada = sizeof(ListaDuplamenteEncadeada);
+    return lista;
 }
-
-if (!lista) {
-    perror("Não foi possível alocar memória")
-    return NULL;
-}
-
-lista->inicio = NULL;
-lista->fim = NULL;
-lista->tamanho = 0;
-lista->memoriaAlocada = sizeof(ListaDuplamenteEncadeada);
-return lista;
-
 void destruirLista(ListaDuplamenteEncadeada* lista){
     if(!lista) return;
     No* atual = lista -> inicio;
@@ -84,7 +81,7 @@ bool inserirNoFim(ListaDuplamenteEncadeada* lista, const void* dado, size_t tama
 
     if(!novoNo -> dado){
         perror("Falha ao alocar memória para o dado");
-        free(novoNO);
+        free(novoNo);
         return false;
     }
     memcpy(novoNo -> dado, dado, tamanhoDoDado);
@@ -116,12 +113,12 @@ void* removerDoInicio(ListaDuplamenteEncadeada* lista){
     if(lista -> inicio != NULL){
         lista -> inicio -> anterior = NULL;
     }
-    else{
+    else {
         lista -> fim = NULL;
     }
     lista -> tamanho--;
     lista -> memoriaAlocada -= (sizeof(No) + tamanhoDoDado);
-    free(noRemovido)
+    free(noRemovido);
 
     return dadoRemovido;
 }
@@ -130,6 +127,7 @@ void* removerDoFim(ListaDuplamenteEncadeada* lista){
     if (!lista || listaEstaVazia(lista)) return NULL;
 
     No* noRemovido = lista -> fim;
+    void* dadoRemovido = noRemovido -> dado;
     size_t tamanhoDoDado = sizeof(int);
 
     lista -> fim = noRemovido -> anterior;
@@ -137,7 +135,7 @@ void* removerDoFim(ListaDuplamenteEncadeada* lista){
     if (lista -> fim != NULL){
         lista -> fim -> proximo = NULL;
     } 
-    else{
+    else {
         lista -> inicio =NULL;
     }
     lista -> tamanho--;
