@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 #include "Stack.h"
 #include "Stack.c"
 
@@ -13,31 +12,13 @@ void limparTela() {
 #endif
 }
 
-char obterEntradaChar() {
-    char valor = 0;
-    char buffer[10];
-
-    if (fgets(buffer, sizeof(buffer), stdin)) {
-        if (buffer[0] != '\n' && (buffer[1] == '\n' || buffer[1] == '\0')) {
-            valor = buffer[0];
-        } else if (buffer[0] == '\n') {
-             printf("Entrada invalida (vazio). Tente novamente.\n");
-             valor = 0;
-        } else {
-             printf("Entrada invalida (mais de um caractere). Tente novamente.\n");
-             if (strchr(buffer, '\n') == NULL) {
-                 int c;
-                 while ((c = getchar()) != '\n' && c != EOF);
-             }
-             valor = 0;
-        }
+void imprimirFloat(const void* dado) {
+    if (dado) {
+        printf("%.2f", *(float*)dado);
     } else {
-         printf("Erro de leitura.\n");
-         valor = 0;
+        printf("NULL");
     }
-    return valor;
 }
-
 
 int main() {
     Pilha* pilha = criarPilha();
@@ -47,26 +28,27 @@ int main() {
     }
 
     int opcao;
-    char valorChar;
+    float valorFloat;
     void* dadoDesempilhado = NULL;
     void* dadoTopo = NULL;
 
     do {
         limparTela();
 
-        printf("--- Status da Pilha Estatica (Array) ---\n");
+        printf("--- Status da Pilha Dinamica (Lista Encadeada) ---\n");
         dadoTopo = verTopo(pilha);
         printf("Topo: ");
         if (dadoTopo) {
-            printf("%c\n", *(char*)dadoTopo);
+            imprimirFloat(dadoTopo);
+            printf("\n");
         } else {
             printf("NULL\n");
         }
         printf("Tamanho: %d\n", obterTamanhoPilha(pilha));
         printf("Memoria alocada: %zu bytes\n", obterMemoriaAlocadaPilha(pilha));
 
-        imprimirPilha(pilha);
-        printf("----------------------------------------\n");
+        imprimirPilha(pilha, imprimirFloat);
+        printf("--------------------------------------------------\n");
 
         printf("\nMENU (0 para encerrar o programa):\n");
         printf("1 - Empilhar (push)\n");
@@ -83,31 +65,31 @@ int main() {
             while ((c = getchar()) != '\n' && c != EOF);
         }
 
-
         switch (opcao) {
             case 1:
-                printf("Digite o caractere a ser empilhado: ");
-                valorChar = obterEntradaChar();
-
-                if(valorChar != 0) {
-                    if (!empilhar(pilha, &valorChar)) {
-                        printf("Falha ao empilhar. Pilha pode estar cheia.\n");
-                    } else {
-                        printf("Caractere '%c' empilhado.\n", valorChar);
-                    }
-                     printf("Pressione Enter para continuar...");
-                     getchar();
-
+                printf("Digite o valor float a ser empilhado: ");
+                if (scanf("%f", &valorFloat) != 1) {
+                     printf("Entrada invalida para float.\n");
+                     int c;
+                     while ((c = getchar()) != '\n' && c != EOF);
                 } else {
-                    printf("Pressione Enter para continuar...");
                     getchar();
+                    if (!empilhar(pilha, &valorFloat, sizeof(float))) {
+                        printf("Falha ao empilhar.\n");
+                    } else {
+                        printf("Valor %.2f empilhado.\n", valorFloat);
+                    }
                 }
+                printf("Pressione Enter para continuar...");
+                getchar();
                 break;
 
             case 2:
                 dadoDesempilhado = desempilhar(pilha);
                 if (dadoDesempilhado != NULL) {
-                    printf("Desempilhado: %c\n", *(char*)dadoDesempilhado);
+                    printf("Desempilhado: ");
+                    imprimirFloat(dadoDesempilhado);
+                    printf("\n");
                     free(dadoDesempilhado);
                     dadoDesempilhado = NULL;
                 } else {

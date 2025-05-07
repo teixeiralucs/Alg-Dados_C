@@ -4,23 +4,25 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#define TAMANHO_MAX_PILHA 50
+typedef struct No {
+    void* dado;
+    struct No* proximo;
+} No;
 
 typedef struct {
-    void* dados[TAMANHO_MAX_PILHA];
-    int topo;
-    int capacidade;
+    No* topo;
+    int tamanho;
+    size_t memoriaAlocada;
 } Pilha;
 
 Pilha* criarPilha();
 void destruirPilha(Pilha* pilha);
-bool estaPilhaVazia(const Pilha* pilha);
-bool estaPilhaCheia(const Pilha* pilha);
-bool empilhar(Pilha* pilha, const void* dado);
+bool empilhar(Pilha* pilha, const void* dado, size_t tamanhoDado);
 void* desempilhar(Pilha* pilha);
 void* verTopo(const Pilha* pilha);
+bool estaPilhaVazia(const Pilha* pilha);
 int obterTamanhoPilha(const Pilha* pilha);
 size_t obterMemoriaAlocadaPilha(const Pilha* pilha);
-void imprimirPilha(const Pilha* pilha);
+void imprimirPilha(const Pilha* pilha, void (*imprimirDado)(const void*));
 
 #endif

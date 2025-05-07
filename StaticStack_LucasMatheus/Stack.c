@@ -3,111 +3,116 @@
 #include <stdlib.h>
 #include <string.h>
 
-Pilha* criarPilha(){
+
+Pilha* criarPilha() {
     Pilha* pilha = (Pilha*)malloc(sizeof(Pilha));
-    if (!pilha){
-        perror ("Não foi possivel alocar memória");
+    if (!pilha) {
+        perror("Falha ao alocar estrutura da pilha");
         return NULL;
     }
-    pilha -> maximo = -1;
-    pilha -> capacidade = MAX_STACK_SIZE;
-    pilha -> memoriaAlocada = sizeof(Pilha);
+    pilha->topo = -1;
+    pilha->capacidade = TAMANHO_MAX_PILHA;
     return pilha;
 }
 
-void destruirPilha (Pilha* pilha){
-    if (!pilha){
+void destruirPilha(Pilha* pilha) {
+    if (!pilha) {
         return;
     }
-    while (!pilhaEstaVazia(pilha)){
-        void* dado = Pop(pilha);
-        free(dado);
+    while (!estaPilhaVazia(pilha)) {
+        void* dado = desempilhar(pilha);
+        if (dado != NULL) {
+            free(dado);
+        }
     }
     free(pilha);
 }
 
-bool pilhaEstaVazia (const Pilha* pilha){
-    return pilha == NULL || pilha -> maximo == -1;
+bool estaPilhaVazia(const Pilha* pilha) {
+    return pilha == NULL || pilha->topo == -1;
 }
 
-bool PilhaEstaCheia (const Pilha* pilha){
-    return pilha != NULL && pilha -> maximo == pilha -> capacidade -1;
+bool estaPilhaCheia(const Pilha* pilha) {
+    return pilha != NULL && pilha->topo == pilha->capacidade - 1;
 }
 
-bool Push (Pilha* pilha, const void* dado){
-    if (!pilha || pilhaEstaVazia(pilha)){
-        printf(stderr, "Erro: A pilha está cheia ou vazia\n");
+bool empilhar(Pilha* pilha, const void* dado) {
+    if (!pilha || estaPilhaCheia(pilha)) {
+        fprintf(stderr, "Erro: Pilha esta cheia ou eh nula.\n");
         return false;
     }
-    if(!dado){
-        printf(stderr, "Erro: Não há dado para inserir");
+    if (!dado) {
+        fprintf(stderr, "Erro: Nao eh possivel empilhar dado nulo.\n");
         return false;
     }
-    char* copiarDado = (char*)malloc(sizeof(char));
-    if(!copiarDado){
-        perror("Erro ao alocar memória para o dado");
-        return false;
-    }
-    *copiarDado = *(char*)dado;
 
-    pilha -> maximo++;
-    pilha -> dado -> maximo = copiarDado;
-    pilha -> memoriaAlocada += sizeof(char);
+    char* copiaDado = (char*)malloc(sizeof(char));
+    if (!copiaDado) {
+        perror("Falha ao alocar memoria para elemento da pilha");
+        return false;
+    }
+
+    *copiaDado = *(char*)dado;
+
+    pilha->topo++;
+    pilha->dados[pilha->topo] = copiaDado;
 
     return true;
 }
 
-void* Pop(Pilha* pilha){
-    if (!pilha || pilhaEstaVazia(pilha)){
+void* desempilhar(Pilha* pilha) {
+    if (!pilha || estaPilhaVazia(pilha)) {
         return NULL;
     }
-    void* dadoPonteiro = pilha -> dado -> maximo;
-    pilha -> dado -> maximo = NULL;
-    pilha -> maximo--;
-    pilha memoriaAlocada -= sizeof(char);
 
-    return dadoPonteiro;
+    void* ponteiroDado = pilha->dados[pilha->topo];
+    pilha->dados[pilha->topo] = NULL;
+    pilha->topo--;
+
+    return ponteiroDado;
 }
 
-void* Topo (const Pilha* pilha){
-    if(!pilha || pilhaEstaVazia(pilha)){
+void* verTopo(const Pilha* pilha) {
+    if (!pilha || estaPilhaVazia(pilha)) {
         return NULL;
     }
-    return pilha -> dado -> maximo;
+    return pilha->dados[pilha->topo];
 }
 
-int TamanhodaPilha (const Pilha* pilha){
-    if (!pilha){
+int obterTamanhoPilha(const Pilha* pilha) {
+    if (!pilha) {
         return 0;
     }
-    return pilha -> maximo + 1;
+    return pilha->topo + 1;
 }
 
-size_t MemoriaAlocadaDaPilha (const Pilha* pilha){
-    if (!stack){
+size_t obterMemoriaAlocadaPilha(const Pilha* pilha) {
+     if (!pilha) {
         return 0;
     }
-    return sizeof(Pilha) + (TamanhodaPilha(pilha) + sizeof(char));
+     size_t memoriaElementos = (size_t)obterTamanhoPilha(pilha) * sizeof(char);
+     return sizeof(Pilha) + memoriaElementos;
 }
 
-void ImprimirPilha(const Pilha* pilha){
+void imprimirPilha(const Pilha* pilha) {
     printf("Pilha: ");
-    if (pilhaEstaVazia(pilha));
-    printf("Vazia\n");
-    return;
-    
-    for (int i = pilha -> maximo; i >=0; i--){
-        printF("%c", *(char*)(pilha -> dado[i]));
-        if (i> 0){
-            printf("->");
+    if (estaPilhaVazia(pilha)) {
+        printf("Vazia!\n");
+        return;
+    }
+
+    for (int i = pilha->topo; i >= 0; i--) {
+        if (pilha->dados[i] != NULL) {
+             printf("%c", *(char*)(pilha->dados[i]));
+             if (i > 0) {
+                 printf(" -> ");
+             }
+        } else {
+            printf("[NULL]");
+             if (i > 0) {
+                 printf(" -> ");
+             }
         }
     }
     printf("\n");
 }
-
-
-
-
-
-
-
